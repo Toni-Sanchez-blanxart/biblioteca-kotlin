@@ -4,75 +4,77 @@ import models.Lector
 import models.Llibre
 
 /**
- * Classe que gestiona el catàleg de llibres i els lectors registrats.
+ * Classe que gestiona la biblioteca.
+ * Controla el catàleg de llibres i els lectors registrats.
  */
 class Biblioteca {
 
     /**
-     * Catàleg de llibres de la biblioteca.
+     * Catàleg privat de llibres.
      */
-    val cataleg: MutableList<Llibre> = mutableListOf()
+    private val cataleg: MutableList<Llibre> = mutableListOf()
 
     /**
-     * Lectors registrats a la biblioteca.
+     * Llista privada de lectors registrats.
      */
-    val lectors: MutableList<Lector> = mutableListOf()
+    private val lectors: MutableList<Lector> = mutableListOf()
 
     /**
      * Afegeix un llibre al catàleg.
+     * Retorna false si l'ID ja existeix.
      */
-    fun afegirLlibre(llib: Llibre) {
+    fun afegirLlibre(llib: Llibre): Boolean {
+        if (cataleg.any { it.id == llib.id }) {
+            return false
+        }
         cataleg.add(llib)
-        println("Afegit al catàleg: ${llib.info()}")
+        return true
     }
 
     /**
      * Registra un lector a la biblioteca.
+     * Retorna false si l'ID ja existeix.
      */
-    fun registrarLector(lector: Lector) {
+    fun registrarLector(lector: Lector): Boolean {
+        if (lectors.any { it.id == lector.id }) {
+            return false
+        }
         lectors.add(lector)
-        println("Lector registrat: ${lector.nom}")
+        return true
     }
 
     /**
-     * Mostra només els llibres que NO estan prestats.
+     * Retorna un llibre a partir del seu ID.
+     * Si no existeix, retorna null.
+     */
+    fun obtenirLlibre(id: String): Llibre? {
+        return cataleg.find { it.id == id }
+    }
+
+    /**
+     * Retorna un lector a partir del seu ID.
+     * Si no existeix, retorna null.
+     */
+    fun obtenirLector(id: String): Lector? {
+        return lectors.find { it.id == id }
+    }
+
+    /**
+     * Mostra tots els llibres disponibles.
      */
     fun llistarDisponibles() {
         val disponibles = cataleg.filter { it.disponible }
         if (disponibles.isEmpty()) {
-            println("No hi ha llibres disponibles ara mateix.")
+            println("No hi ha llibres disponibles.")
         } else {
-            println("Llibres disponibles al catàleg:")
-            disponibles.forEach { llibre ->
-                println(" - ${llibre.info()}")
-            }
+            disponibles.forEach { println(it.info()) }
         }
     }
 
     /**
-     * Retorna tots els llibres del catàleg escrits per un autor concret.
+     * Cerca llibres d'un autor concret.
      */
     fun cercarPerAutor(autor: String): List<Llibre> {
         return cataleg.filter { it.autor.equals(autor, ignoreCase = true) }
     }
-
-    /**
-     * Mostra el catàleg complet (llibres disponibles i prestats).
-     */
-/*    fun llistarCatalegComplet() {
-        if (cataleg.isEmpty()) {
-            println("El catàleg és buit.")
-        } else {
-            println("Catàleg complet de la biblioteca:")
-            cataleg.forEach { llibre ->
-                println(" - ${llibre.info()}")
-            }
-        }
-    }
-
-    /**
-     * Retorna una còpia de només-lectura del catàleg.
-     * Serveix per passar la llista a Utils sense exposar la llista interna.
-     */
-    fun getCataleg(): List<Llibre> = cataleg.toList()*/
 }

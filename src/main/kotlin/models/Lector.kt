@@ -1,43 +1,53 @@
 package models
 
 /**
- * Representa un lector que pot demanar llibres en préstec.
- * Hereta de Persona (RA4.7).
+ * Representa un lector de la biblioteca.
+ * Hereta de la classe Persona.
  */
-class Lector(
-    nom: String
-) : Persona(nom) {
+class Lector(id: String, nom: String) : Persona(id, nom) {
 
     /**
-     * Llibres actualment prestats per aquest lector.
-     * La llista és privada (encapsulació).
+     * Llista de llibres que el lector té en préstec.
      */
-    private val llibresPrestats: MutableList<Llibre> = mutableListOf()
+    private val prestecs: MutableList<Llibre> = mutableListOf()
 
     /**
-     * Presta un llibre a aquest lector, si està disponible.
+     * Presta un llibre al lector.
+     * El llibre passa a estat prestat i s'afegeix a la llista de préstecs.
      */
     fun prestarLlibre(llib: Llibre) {
-        if (!llib.disponible) {
-            println("No es pot prestar el llibre \"${llib.titol}\" perquè ja està prestat.")
-            return
+        if (llib.disponible) {
+            llib.prestar()
+            prestecs.add(llib)
+            println("Llibre prestat correctament al lector $nom.")
+        } else {
+            println("El llibre no està disponible.")
         }
-
-        llib.prestar()
-        llibresPrestats.add(llib)
-        println("$nom ha prestat el llibre \"${llib.titol}\".")
     }
 
     /**
-     * Retorna un llibre que aquest lector tenia en préstec.
+     * Retorna un llibre prestat.
+     * El llibre torna a estar disponible.
      */
+    fun retornarLlibre(llib: Llibre) {
+        if (prestecs.contains(llib)) {
+            llib.retornar()
+            prestecs.remove(llib)
+            println("Llibre retornat correctament.")
+        } else {
+            println("Aquest llibre no pertany als préstecs del lector.")
+        }
+    }
 
     /**
-     * Mostra tots els llibres que aquest lector té actualment prestats.
+     * Mostra tots els llibres que el lector té en préstec.
      */
-
-
-    /**
-     * Retorna el nombre de llibres actualment prestats per aquest lector.
-     */
+    fun llistarPrestecs() {
+        if (prestecs.isEmpty()) {
+            println("El lector no té llibres en préstec.")
+        } else {
+            println("Llibres prestats al lector $nom:")
+            prestecs.forEach { println(it.info()) }
+        }
+    }
 }

@@ -1,136 +1,113 @@
 package app
 
 import core.Biblioteca
-import models.Llibre
 import models.Lector
-import utils.Utils
-fun mostrarMenu() {
-    println(
-        """
-        -------------------------------
-        GESTIÓ DE BIBLIOTECA
-        -------------------------------
-        1. Registrar llibre
-        2. Registrar lector
-        3. Prestar llibre
-        4. Retornar llibre
-        5. Llistar llibres disponibles
-        6. Cercar llibres per autor
-        0. Sortir
-        -------------------------------
-        """.trimIndent()
-    )
-}
+import models.Llibre
 
-fun registrarLlibre(biblioteca: Biblioteca) {
-    print("Títol: ")
-    val titol = readln()
-    print("Autor: ")
-    val autor = readln()
-    val llibre = Llibre(titol, autor)
-    biblioteca.afegirLlibre(llibre)
-    println("Llibre registrat correctament.")
-}
-
-fun registrarLector(biblioteca: Biblioteca) {
-    print("Nom del lector: ")
-    val nom = readln()
-
-    val lector = Lector(nom)
-    biblioteca.registrarLector(lector)
-
-    println("Lector registrat correctament.")
-}
-
-fun prestarLlibre(biblioteca: Biblioteca) {
-    println("Seguidament es mostren els llibres disponibles.")
-    biblioteca.llistarDisponibles()
-    println()
-    print("Títol del llibre: ")
-    val titol = readln()
-
-    val llibre = biblioteca.cataleg.find { it.titol.equals(titol, ignoreCase = true) }
-
-    if (llibre == null) {
-        println("Llibre no trobat.")
-        return
-    }
-
-    if (llibre.prestat) {
-        println("El llibre ja està prestat.")
-        return
-    }
-
-    print("Nom del lector: ")
-    val nomLector = readln()
-
-    val lector = biblioteca.lectors.find { it.nom.equals(nomLector, ignoreCase = true) }
-    if (lector == null) {
-        println("Lector no trobat.")
-        return
-    }
-
-    lector.prestarLlibre(llibre)
-    println("Llibre prestat correctament.")
-}
-
-fun retornarLlibre(biblioteca: Biblioteca) {
-    print("Títol del llibre: ")
-    val titol = readln()
-
-    val llibre = biblioteca.cataleg.find { it.titol.equals(titol, ignoreCase = true) }
-
-    if (llibre == null || !llibre.prestat) {
-        println("El llibre no està prestat.")
-        return
-    }
-
-    llibre.retornar()
-    println("Llibre retornat correctament.")
-}
-
-fun cercarPerAutor(biblioteca: Biblioteca) {
-    print("Autor: ")
-    val autor = readln()
-
-    val resultats = biblioteca.cercarPerAutor(autor)
-
-    if (resultats.isEmpty()) {
-        println("No s'han trobat llibres d'aquest autor.")
-    } else {
-        resultats.forEach {
-            println(it.info())
-        }
-        println("Total: ${Utils.comptarPerAutor(resultats, autor)}")
-    }
-}
-
-
-
-
-
-
-
-
+/**
+ * Funció principal del programa.
+ * Mostra el menú i gestiona les opcions de l'usuari.
+ */
 fun main() {
 
     val biblioteca = Biblioteca()
     var opcio: Int
 
     do {
-        mostrarMenu()
+        println("""
+            -------------------------
+            GESTIÓ DE BIBLIOTECA
+            -------------------------
+            1. Registrar llibre
+            2. Registrar lector
+            3. Prestar llibre
+            4. Retornar llibre
+            5. Llistar llibres disponibles
+            6. Cercar llibres per autor
+            0. Sortir
+        """.trimIndent())
+
         opcio = readln().toIntOrNull() ?: -1
 
         when (opcio) {
-            1 -> registrarLlibre(biblioteca)
-            2 -> registrarLector(biblioteca)
-            3 -> prestarLlibre(biblioteca)
-            4 -> retornarLlibre(biblioteca)
+
+            // Registrar un llibre nou
+            1 -> {
+                print("ID llibre: ")
+                val id = readln()
+                print("Títol: ")
+                val titol = readln()
+                print("Autor: ")
+                val autor = readln()
+
+                if (biblioteca.afegirLlibre(Llibre(id, titol, autor)))
+                    println("Llibre registrat correctament.")
+                else
+                    println("Error: ja existeix un llibre amb aquest ID.")
+            }
+
+            // Registrar un lector nou
+            2 -> {
+                print("ID lector: ")
+                val id = readln()
+                print("Nom: ")
+                val nom = readln()
+
+                if (biblioteca.registrarLector(Lector(id, nom)))
+                    println("Lector registrat correctament.")
+                else
+                    println("Error: ja existeix un lector amb aquest ID.")
+            }
+
+            // Prestar un llibre a un lector
+            3 -> {
+                print("ID llibre: ")
+                val idLlibre = readln()
+                print("ID lector: ")
+                val idLector = readln()
+
+                val llibre = biblioteca.obtenirLlibre(idLlibre)
+                val lector = biblioteca.obtenirLector(idLector)
+
+                if (llibre == null || lector == null) {
+                    println("Dades incorrectes.")
+                } else {
+                    lector.prestarLlibre(llibre)
+                }
+            }
+
+            // Retornar un llibre
+            4 -> {
+                print("ID llibre: ")
+                val idLlibre = readln()
+                print("ID lector: ")
+                val idLector = readln()
+
+                val llibre = biblioteca.obtenirLlibre(idLlibre)
+                val lector = biblioteca.obtenirLector(idLector)
+
+                if (llibre == null || lector == null) {
+                    println("Dades incorrectes.")
+                } else {
+                    lector.retornarLlibre(llibre)
+                }
+            }
+
+            // Llistar llibres disponibles
             5 -> biblioteca.llistarDisponibles()
-            6 -> cercarPerAutor(biblioteca)
+
+            // Cercar llibres per autor
+            6 -> {
+                print("Autor: ")
+                biblioteca.cercarPerAutor(readln())
+                    .forEach { println(it.info()) }
+            }
+
             0 -> println("Sortint de l'aplicació...")
+
             else -> println("Opció no vàlida.")
         }
 
     } while (opcio != 0)
 }
+

@@ -1,9 +1,14 @@
 package models
 
 /**
- * Classe base per a persones de la biblioteca.
- * Mostra l'ús d'herència al projecte (RA4.7).
+ * Classe base del sistema.
+ * Representa una persona de la biblioteca.
+ * No s'instancia directament.
  */
 open class Persona(
-    val nom: String
+    val id: String,   // Identificador únic de la persona
+    val nom: String   // Nom de la persona
 )
+
+
+
