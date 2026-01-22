@@ -4,13 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a8c646be-a408-46f8-a0dc-e4fc5515ad64" name="Changes" comment="commit2-biblioteca">
+    <list default="true" id="a8c646be-a408-46f8-a0dc-e4fc5515ad64" name="Changes" comment="commit3-ID_biblioteca">
+      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/app/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/app/Main.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/core/Biblioteca.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/core/Biblioteca.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/models/Lector.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/models/Lector.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/models/Llibre.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/models/Llibre.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/models/Persona.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/models/Persona.kt" afterDir="false" />
     </list>
     <list id="52436919-e9f8-4367-b0cf-d577d7aa85b7" name="Changes-bibl" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -40,21 +41,28 @@
       </state>
     </system>
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Kotlin File" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "Toni-Sanchez-blanxart"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Toni-Sanchez-blanxart&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/Toni-Sanchez-blanxart/biblioteca-kotlin.git",
-    "accountId": "d56c6599-b5a0-4560-b859-464bbce0b3fc"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Toni-Sanchez-blanxart/biblioteca-kotlin.git&quot;,
+    &quot;accountId&quot;: &quot;d56c6599-b5a0-4560-b859-464bbce0b3fc&quot;
   }
-}]]></component>
+}</component>
   <component name="GradleScriptDefinitionsStorage" workingDir="$PROJECT_DIR$" gradleHome="$USER_HOME$/.gradle/wrapper/dists/gradle-8.14-bin/38aieal9i53h9rfe7vjup95b9/gradle-8.14" javaHome="/usr/lib/jvm/java-21-openjdk-amd64" gradleVersion="8.14" />
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
@@ -67,18 +75,18 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Gradle.RA4.Biblioteca-classe-02-menu [:app.MainKt.main()].executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "master",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/home/super/Documents/Programacion/RA4.Biblioteca-classe-02-menu",
-    "settings.editor.selected.configurable": "project.propVCSSupport.CommitDialog"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Gradle.RA4.Biblioteca-classe-02-menu [:app.MainKt.main()].executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/super/Documents/Programacion/RA4.Biblioteca-classe-02-menu&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;project.propVCSSupport.CommitDialog&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration default="true" type="JetRunConfigurationType">
       <module name="RA4.Biblioteca-classe-02-menu" />
@@ -140,7 +148,15 @@
       <option name="project" value="LOCAL" />
       <updated>1768498545106</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="commit3-ID_biblioteca">
+      <option name="closed" value="true" />
+      <created>1768500231376</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1768500231376</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -156,6 +172,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="commit2-biblioteca" />
-    <option name="LAST_COMMIT_MESSAGE" value="commit2-biblioteca" />
+    <MESSAGE value="commit3-ID_biblioteca" />
+    <option name="LAST_COMMIT_MESSAGE" value="commit3-ID_biblioteca" />
   </component>
 </project>

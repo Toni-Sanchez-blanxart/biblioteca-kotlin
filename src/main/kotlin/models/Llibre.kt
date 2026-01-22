@@ -2,47 +2,55 @@ package models
 
 /**
  * Representa un llibre del catàleg de la biblioteca.
- * Cada llibre té un identificador únic.
  */
 class Llibre(
-    val id: String,        // ID únic del llibre
-    val titol: String,     // Títol del llibre
-    val autor: String      // Autor del llibre
+    val id: String,
+    val titol: String,
+    val autor: String
 ) {
 
     /**
-     * Indica si el llibre està prestat.
-     * És privat perquè només el llibre pot modificar el seu estat.
+     * Indica si el llibre està prestat o no.
+     * El setter és privat: només la mateixa classe pot canviar aquest valor.
      */
-    private var prestat: Boolean = false
+    var prestat: Boolean = false
+        private set
 
     /**
-     * Propietat calculada.
-     * Retorna true si el llibre NO està prestat.
+     * Getter públic per a persistència
      */
-    val disponible: Boolean
-        get() = !prestat
+    val estaPrestat: Boolean
+        get() = prestat
+
+    /**
+     * Retorna un text descriptiu del llibre.
+     */
+    fun info(): String {
+        val estat = if (prestat) "PRESTAT" else "DISPONIBLE"
+        return "Llibre: \"$titol\", autor: $autor, estat: $estat"
+    }
 
     /**
      * Marca el llibre com a prestat.
      */
     fun prestar() {
-        prestat = true
+        if (!prestat) {
+            prestat = true
+        }
     }
 
     /**
      * Marca el llibre com a retornat.
      */
     fun retornar() {
-        prestat = false
+        if (prestat) {
+            prestat = false
+        }
     }
 
     /**
-     * Retorna una descripció del llibre.
+     * Indica si el llibre està disponible
      */
-    fun info(): String {
-        val estat = if (prestat) "PRESTAT" else "DISPONIBLE"
-        return "ID: $id | \"$titol\" - $autor | Estat: $estat"
-    }
+    val disponible: Boolean
+        get() = !prestat
 }
-

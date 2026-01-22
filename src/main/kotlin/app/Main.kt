@@ -1,38 +1,41 @@
 package app
 
 import core.Biblioteca
-import models.Lector
 import models.Llibre
+import models.Lector
+import utils.Utils
 
-/**
- * Funció principal del programa.
- * Mostra el menú i gestiona les opcions de l'usuari.
- */
+fun mostrarMenu() {
+    println(
+        """
+        -------------------------------
+        GESTIÓ DE BIBLIOTECA
+        -------------------------------
+        1. Registrar llibre
+        2. Registrar lector
+        3. Prestar llibre
+        4. Retornar llibre
+        5. Llistar llibres disponibles
+        6. Cercar llibres per autor
+        0. Sortir
+        -------------------------------
+        """.trimIndent()
+    )
+}
+
 fun main() {
 
     val biblioteca = Biblioteca()
+    biblioteca.carregar() // Carrega dades des de fitxers TXT
     var opcio: Int
 
     do {
-        println("""
-            -------------------------
-            GESTIÓ DE BIBLIOTECA
-            -------------------------
-            1. Registrar llibre
-            2. Registrar lector
-            3. Prestar llibre
-            4. Retornar llibre
-            5. Llistar llibres disponibles
-            6. Cercar llibres per autor
-            0. Sortir
-        """.trimIndent())
-
+        mostrarMenu()
         opcio = readln().toIntOrNull() ?: -1
 
         when (opcio) {
 
-            // Registrar un llibre nou
-            1 -> {
+            1 -> { // Registrar llibre
                 print("ID llibre: ")
                 val id = readln()
                 print("Títol: ")
@@ -40,27 +43,29 @@ fun main() {
                 print("Autor: ")
                 val autor = readln()
 
-                if (biblioteca.afegirLlibre(Llibre(id, titol, autor)))
+                val llibre = Llibre(id, titol, autor)
+                if (biblioteca.afegirLlibre(llibre)) {
                     println("Llibre registrat correctament.")
-                else
+                } else {
                     println("Error: ja existeix un llibre amb aquest ID.")
+                }
             }
 
-            // Registrar un lector nou
-            2 -> {
+            2 -> { // Registrar lector
                 print("ID lector: ")
                 val id = readln()
-                print("Nom: ")
+                print("Nom del lector: ")
                 val nom = readln()
 
-                if (biblioteca.registrarLector(Lector(id, nom)))
+                val lector = Lector(id, nom)
+                if (biblioteca.registrarLector(lector)) {
                     println("Lector registrat correctament.")
-                else
+                } else {
                     println("Error: ja existeix un lector amb aquest ID.")
+                }
             }
 
-            // Prestar un llibre a un lector
-            3 -> {
+            3 -> { // Prestar llibre
                 print("ID llibre: ")
                 val idLlibre = readln()
                 print("ID lector: ")
@@ -69,15 +74,12 @@ fun main() {
                 val llibre = biblioteca.obtenirLlibre(idLlibre)
                 val lector = biblioteca.obtenirLector(idLector)
 
-                if (llibre == null || lector == null) {
-                    println("Dades incorrectes.")
-                } else {
-                    lector.prestarLlibre(llibre)
-                }
+                if (llibre == null) println("Llibre no trobat.")
+                else if (lector == null) println("Lector no trobat.")
+                else lector.prestarLlibre(llibre)
             }
 
-            // Retornar un llibre
-            4 -> {
+            4 -> { // Retornar llibre
                 print("ID llibre: ")
                 val idLlibre = readln()
                 print("ID lector: ")
@@ -86,21 +88,24 @@ fun main() {
                 val llibre = biblioteca.obtenirLlibre(idLlibre)
                 val lector = biblioteca.obtenirLector(idLector)
 
-                if (llibre == null || lector == null) {
-                    println("Dades incorrectes.")
-                } else {
-                    lector.retornarLlibre(llibre)
-                }
+                if (llibre == null) println("Llibre no trobat.")
+                else if (lector == null) println("Lector no trobat.")
+                else lector.retornarLlibre(llibre)
             }
 
-            // Llistar llibres disponibles
-            5 -> biblioteca.llistarDisponibles()
+            5 -> { // Llistar llibres disponibles
+                biblioteca.llistarDisponibles()
+            }
 
-            // Cercar llibres per autor
-            6 -> {
+            6 -> { // Cercar llibres per autor
                 print("Autor: ")
-                biblioteca.cercarPerAutor(readln())
-                    .forEach { println(it.info()) }
+                val autor = readln()
+                val resultats = biblioteca.cercarPerAutor(autor)
+                if (resultats.isEmpty()) println("No s'han trobat llibres d'aquest autor.")
+                else {
+                    resultats.forEach { println(it.info()) }
+                    println("Total: ${Utils.comptarPerAutor(resultats, autor)}")
+                }
             }
 
             0 -> println("Sortint de l'aplicació...")
@@ -109,5 +114,10 @@ fun main() {
         }
 
     } while (opcio != 0)
+
+    // Desa les dades abans de sortir
+    biblioteca.guardar()
+    println("Dades desades correctament.")
 }
+
 

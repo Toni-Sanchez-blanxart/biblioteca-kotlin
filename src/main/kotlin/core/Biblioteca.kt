@@ -1,80 +1,105 @@
 package core
 
-import models.Lector
 import models.Llibre
+import models.Lector
+import java.io.File
 
-/**
- * Classe que gestiona la biblioteca.
- * Controla el catàleg de llibres i els lectors registrats.
- */
 class Biblioteca {
 
-    /**
-     * Catàleg privat de llibres.
-     */
-    private val cataleg: MutableList<Llibre> = mutableListOf()
+    val cataleg: MutableList<Llibre> = mutableListOf()
+    val lectors: MutableList<Lector> = mutableListOf()
 
-    /**
-     * Llista privada de lectors registrats.
-     */
-    private val lectors: MutableList<Lector> = mutableListOf()
+    private val fitxerLlibres = "llibres.txt"
+    private val fitxerLectors = "lectors.txt"
 
-    /**
-     * Afegeix un llibre al catàleg.
-     * Retorna false si l'ID ja existeix.
-     */
+    // -------------------
+    // Funcions de gestió
+    // -------------------
+
     fun afegirLlibre(llib: Llibre): Boolean {
-        if (cataleg.any { it.id == llib.id }) {
-            return false
-        }
+        if (cataleg.any { it.id == llib.id }) return false
         cataleg.add(llib)
         return true
     }
 
-    /**
-     * Registra un lector a la biblioteca.
-     * Retorna false si l'ID ja existeix.
-     */
     fun registrarLector(lector: Lector): Boolean {
-        if (lectors.any { it.id == lector.id }) {
-            return false
-        }
+        if (lectors.any { it.id == lector.id }) return false
         lectors.add(lector)
         return true
     }
 
-    /**
-     * Retorna un llibre a partir del seu ID.
-     * Si no existeix, retorna null.
-     */
-    fun obtenirLlibre(id: String): Llibre? {
-        return cataleg.find { it.id == id }
-    }
+    fun obtenirLlibre(id: String): Llibre? = cataleg.find { it.id == id }
+    fun obtenirLector(id: String): Lector? = lectors.find { it.id == id }
 
-    /**
-     * Retorna un lector a partir del seu ID.
-     * Si no existeix, retorna null.
-     */
-    fun obtenirLector(id: String): Lector? {
-        return lectors.find { it.id == id }
-    }
-
-    /**
-     * Mostra tots els llibres disponibles.
-     */
     fun llistarDisponibles() {
         val disponibles = cataleg.filter { it.disponible }
-        if (disponibles.isEmpty()) {
-            println("No hi ha llibres disponibles.")
-        } else {
+        if (disponibles.isEmpty()) println("No hi ha llibres disponibles ara mateix.")
+        else {
+            println("Llibres disponibles al catàleg:")
             disponibles.forEach { println(it.info()) }
         }
     }
 
-    /**
-     * Cerca llibres d'un autor concret.
-     */
-    fun cercarPerAutor(autor: String): List<Llibre> {
-        return cataleg.filter { it.autor.equals(autor, ignoreCase = true) }
+    fun cercarPerAutor(autor: String): List<Llibre> =
+        cataleg.filter { it.autor.equals(autor, ignoreCase = true) }
+
+    // -------------------
+    // Funcions de persistència
+    // -------------------
+
+    fun guardar() {
+        // Desa llibres
+        File(fitxerLlibres).printWriter().use { pw ->
+            cataleg.forEach { llibre ->
+                pw.println("${llibre.id};${llibre.titol};${llibre.autor};${llibre.estaPrestat}")
+            }
+        }
+
+        // Desa lectors
+        File(fitxerLectors).printWriter().use { pw ->
+            lectors.forEach { lector ->
+                val prestecs = lector.getPrestecs().joinToString(",") { it.id }
+                pw.println("${lector.id};${lector.nom};$prestecs")
+            }
+        }
+    }
+
+    fun carregar() {
+        val llibresMap = mutableMapOf<String, Llibre>()
+
+        // Carrega llibres
+        File(fitxerLlibres).takeIf { it.exists() }?.forEachLine { linia ->
+            val parts = linia.split(";")
+            if (parts.size >= 4) {
+                val id = parts[0]
+                val titol = parts[1]
+                val autor = parts[2]
+                val prestat = parts[3].toBoolean()
+                val llibre = Llibre(id, titol, autor)
+                if (prestat) llibre.prestar()
+                afegirLlibre(llibre)
+                llibresMap[id] = llibre
+            }
+        }
+
+        // Carrega lectors
+        File(fitxerLectors).takeIf { it.exists() }?.forEachLine { linia ->
+            val parts = linia.split(";")
+            if (parts.size >= 3) {
+                val id = parts[0]
+                val nom = parts[1]
+                val prestecsIds = parts[2].split(",").filter { it.isNotBlank() }
+                val lector = Lector(id, nom)
+                registrarLector(lector)
+                prestecsIds.forEach { llibreId ->
+                    llibresMap[llibreId]?.let { llibre ->
+                        lector.prestarLlibre(llibre)
+                    }
+                }
+            }
+        }
     }
 }
+
+
+
